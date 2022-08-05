@@ -1,0 +1,32 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+@using MinimalProblem.Data
+@using MinimalProblem.Models
+<h3>Join</h3>
+<button class="btn btn-primary" @onclick="JoinGame">Generate Player</button>
+
+@foreach (var name in PlayersNames)
+{
+    <ol>
+        <li>@name</li>
+    </ol>
+}
+
+@code {
+    public static List<string> PlayersNames = new List<string>();
+    public async void JoinGame()
+    {
+        var currentGame = await GameService.GetGameAsync();
+        var player = new Player(Guid.NewGuid().ToString());
+        currentGame.AddPlayer(player);
+
+        GameService.game = currentGame;
+
+        PlayersNames = currentGame.Players.Select(p => p.Name).ToList();
+    }
+}
+
+
+<SurveyPrompt Title="How is Blazor working for you?" />
