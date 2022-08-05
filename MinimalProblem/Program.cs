@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MinimalProblem.Data;
+using MinimalProblem.Models;
 
 namespace MinimalProblem
 {
@@ -15,6 +16,7 @@ namespace MinimalProblem
             builder.Services.AddServerSideBlazor();
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<GameService>();
+            builder.Services.AddScoped<PlayerState>();
 
             var app = builder.Build();
 

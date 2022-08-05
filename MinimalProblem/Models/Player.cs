@@ -1,12 +1,18 @@
 ﻿namespace MinimalProblem.Models
 {
-    public class Player
+    public class PlayerState
     {
+        public event EventHandler? NameChanged;
+
         public string Name { get; set; }
 
-        public Player(string name)
+        public void SetPlayerName(string name)
         {
             this.Name = name;
+            this.NotifyNameChanged();
         }
+
+        public void NotifyNameChanged()
+        => this.NameChanged?.Invoke(this, EventArgs.Empty);
     }
 }

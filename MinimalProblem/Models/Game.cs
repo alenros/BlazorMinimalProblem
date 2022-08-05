@@ -2,14 +2,14 @@
 {
     public class Game
     {
-        public List<Player> Players { get; set; } = new List<Player>();
+        public List<PlayerState> Players { get; set; } = new List<PlayerState>();
 
         public Game()
         {
 
         }
 
-        public void AddPlayer(Player player)
+        public void AddPlayer(PlayerState player)
         {
             Players.Add(player);
         }

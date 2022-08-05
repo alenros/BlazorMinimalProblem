@@ -4,28 +4,45 @@
 
 @using MinimalProblem.Data
 @using MinimalProblem.Models
+@using System.Text
+@inject PlayerState playerState
+@implements IDisposable
+
 <h3>Join</h3>
 <button class="btn btn-primary" @onclick="JoinGame">Generate Player</button>
 
-@foreach (var name in PlayersNames)
-{
-    <ol>
-        <li>@name</li>
-    </ol>
-}
+
+<h1>@PlayersNamesDisplay</h1>
 
 @code {
-    public static List<string> PlayersNames = new List<string>();
+    public static string PlayersNamesDisplay = string.Empty;
     public async void JoinGame()
     {
         var currentGame = await GameService.GetGameAsync();
-        var player = new Player(Guid.NewGuid().ToString());
+        var player = new PlayerState();
+        player.SetPlayerName(Guid.NewGuid().ToString());
         currentGame.AddPlayer(player);
 
         GameService.game = currentGame;
 
-        PlayersNames = currentGame.Players.Select(p => p.Name).ToList();
+        var playerNames = currentGame.Players.Select(p => p.Name).ToList();
+        var sb = new StringBuilder();
+        foreach (var name in playerNames)
+        {
+            sb.AppendLine(name);
+        }
+        PlayersNamesDisplay = sb.ToString();
+        StateHasChanged();
     }
+
+    protected override void OnInitialized()
+    => playerState.NameChanged += this.OnNameChanged;
+
+    private void OnNameChanged(object? sender, EventArgs e)
+     => this.InvokeAsync(this.StateHasChanged);
+
+    public void Dispose()
+     => playerState.NameChanged -= this.OnNameChanged;
 }
 
 
